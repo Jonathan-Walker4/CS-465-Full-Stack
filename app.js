@@ -7,6 +7,7 @@ const hbs = require('hbs');
 
 const indexRouter = require('./app_server/routes/index');
 const travelRouter = require('./app_server/routes/travel');
+const { logRequest, logError } = require('./logger');
 
 const app = express();
 
@@ -26,33 +27,21 @@ app.use(cookieParser());
 // Serve static files from the root directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Add extensive debug logging
-app.use((req, res, next) => {
-  console.log(`Request URL: ${req.url}`);
-  console.log(`Request Method: ${req.method}`);
-  next();
-});
+// Use custom logging middleware
+app.use(logRequest);
 
 // Use routes
-app.use('/', (req, res, next) => {
-  console.log('Accessing indexRouter');
-  next();
-}, indexRouter);
-
-app.use('/travel', (req, res, next) => {
-  console.log('Accessing travelRouter');
-  next();
-}, travelRouter);
+app.use('/', indexRouter);
+app.use('/travel', travelRouter);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  console.log('404 Error - Page not found');
   next(createError(404));
 });
 
 // Error handler
+app.use(logError);
 app.use(function(err, req, res, next) {
-  console.log(`Error: ${err.message}`);
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
