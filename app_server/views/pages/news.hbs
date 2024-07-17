@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!-- Website template by freewebsitetemplates.com -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}} - Travlr Getaways Website Template</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+    <div id="background">
+        <div id="page">
+            {{> header }}
+            <div id="contents">
+                <div class="box">
+                    <div id="news" class="body">
+                        <div class="sidebar">
+                            <h3>Latest News</h3>
+                            <ul>
+                                {{#each news.latestNews}}
+                                <li>
+                                    <a href="{{this.link}}">{{this.title}}</a>
+                                </li>
+                                {{/each}}
+                            </ul>
+                            <h3>Vacation Tips</h3>
+                            <ul>
+                                {{#each news.vacationTips}}
+                                <li>
+                                    <a href="{{this.link}}">{{this.title}}</a>
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                        <div>
+                            <h1>News</h1>
+                            <img src="/{{news.featuredArticle.image}}" alt="Img">
+                            <h2>{{news.featuredArticle.title}}</h2>
+                            <span class="time">{{news.featuredArticle.date}}<br> by: {{news.featuredArticle.author}}</span>
+                            {{#each news.featuredArticle.content}}
+                            <p>{{this}}</p>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{> footer }}
+        </div>
+    </div>
+</body>
+</html>

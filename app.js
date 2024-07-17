@@ -7,12 +7,17 @@ const hbs = require('hbs');
 
 const indexRouter = require('./app_server/routes/index');
 const travelRouter = require('./app_server/routes/travel');
+const mealsRouter = require('./app_server/routes/meals');
+const newsRouter = require('./app_server/routes/news');
+const roomsRouter = require('./app_server/routes/rooms');
+const contactRouter = require('./app_server/routes/contact');
+const aboutRouter = require('./app_server/routes/about');
 const { logRequest, logError } = require('./logger');
 
 const app = express();
 
 // View engine setup
-app.set('views', path.join(__dirname, 'app_server', 'views'));
+app.set('views', path.join(__dirname, 'app_server', 'views', 'pages'));
 app.set('view engine', 'hbs');
 
 // Register handlebars partials
@@ -33,6 +38,11 @@ app.use(logRequest);
 // Use routes
 app.use('/', indexRouter);
 app.use('/travel', travelRouter);
+app.use('/meals', mealsRouter);
+app.use('/news', newsRouter);
+app.use('/rooms', roomsRouter);
+app.use('/contact', contactRouter);
+app.use('/about', aboutRouter);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -46,7 +56,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error');  // Ensure this points to the correct path in 'views/pages'
 });
 
 module.exports = app;
