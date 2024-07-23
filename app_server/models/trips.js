@@ -1,4 +1,4 @@
-// models/travlr.js
+// app_server/models/trips.js
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

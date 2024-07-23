@@ -1,0 +1,63 @@
+/* travel.css */
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+#contents {
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+#sites {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
+}
+
+.trip-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.trip-item:hover {
+    transform: scale(1.05);
+}
+
+.travel-image {
+    border-bottom: 1px solid #ddd;
+    max-height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.trip-info {
+    padding: 15px;
+}
+
+.trip-info h2 {
+    font-size: 1.5em;
+    color: #007BFF;
+    margin: 0 0 10px;
+}
+
+.trip-info p {
+    color: #555;
+    margin: 5px 0;
+}
+
+.trip-info strong {
+    color: #333;
+}

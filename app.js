@@ -1,9 +1,14 @@
+// app.js
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const hbs = require('hbs');
+const mongoose = require('mongoose');
+
+// Import Mongoose schema
+require('./app_server/models/trips');
 
 const indexRouter = require('./app_server/routes/index');
 const travelRouter = require('./app_server/routes/travel');
@@ -13,6 +18,19 @@ const roomsRouter = require('./app_server/routes/rooms');
 const contactRouter = require('./app_server/routes/contact');
 const aboutRouter = require('./app_server/routes/about');
 const { logRequest, logError } = require('./logger');
+
+// Connect to MongoDB
+const dbURI = 'mongodb://127.0.0.1/travlr';
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connection.on('connected', () => {
+    console.log(`Mongoose connected to ${dbURI}`);
+});
+mongoose.connection.on('error', err => {
+    console.log('Mongoose connection error:', err);
+});
+mongoose.connection.on('disconnected', () => {
+    console.log('Mongoose disconnected');
+});
 
 const app = express();
 
@@ -46,17 +64,17 @@ app.use('/about', aboutRouter);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+    next(createError(404));
 });
 
 // Error handler
 app.use(logError);
 app.use(function(err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  res.status(err.status || 500);
-  res.render('error');  // Ensure this points to the correct path in 'views/pages'
+    res.status(err.status || 500);
+    res.render('error');  // Ensure this points to the correct path in 'views/pages'
 });
 
 module.exports = app;

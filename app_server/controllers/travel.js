@@ -1,13 +1,17 @@
-const fs = require('fs');
-const path = require('path');
+// app_server/controllers/travel.js
+const mongoose = require('mongoose');
+const Trip = mongoose.model('trips');
 
-const travelIndex = (req, res) => {
-    console.log('Travel controller accessed');
-    const tripsPath = path.join(__dirname, '../../data/trips.json');
-    const trips = JSON.parse(fs.readFileSync(tripsPath, 'utf8'));
-    res.render('travel', { title: "Travlr Getaways", trips });
+const getTrips = async (req, res) => {
+    try {
+        const trips = await Trip.find();
+        res.render('travel', { title: 'Travlr Getaways - Travel', trips });
+    } catch (err) {
+        console.error('Error fetching trips:', err);
+        res.status(500).send('Internal Server Error');
+    }
 };
 
 module.exports = {
-    travelIndex
+    getTrips
 };

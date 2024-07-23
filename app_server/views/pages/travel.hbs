@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<!-- Website template by freewebsitetemplates.com -->
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Dive Sites - Bhaccasyoniztas Beach Resort Website Template</title>
+    <title>Travel - Travlr Getaways Website Template</title>
     <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/images.css" type="text/css">
+    <link rel="stylesheet" href="/css/travel.css" type="text/css"> <!-- Link to the new travel CSS file -->
 </head>
 <body>
     <div id="background">
@@ -17,10 +18,16 @@
                             <h1>Travel</h1>
                             <ul id="sites">
                                 {{#each trips}}
-                                <li>
-                                    <a href="/travel"><img src="{{this.image}}" alt="Img"></a>
-                                    <h2><a href="/travel">{{this.title}}</a></h2>
-                                    <p>{{this.description}}</p>
+                                <li class="trip-item">
+                                    <a href="#"><img src="/images/{{this.image}}" alt="Img" class="travel-image"></a>
+                                    <div class="trip-info">
+                                        <h2>{{this.name}}</h2>
+                                        <p>{{this.description}}</p>
+                                        <p><strong>Length:</strong> {{this.length}} days</p>
+                                        <p><strong>Starting from:</strong> {{this.start}}</p>
+                                        <p><strong>Price per person:</strong> ${{this.perPerson}}</p>
+                                        <p><strong>Resort:</strong> {{this.resort}}</p>
+                                    </div>
                                 </li>
                                 {{/each}}
                             </ul>
