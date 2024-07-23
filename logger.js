@@ -1,23 +1,24 @@
 const fs = require('fs');
 const path = require('path');
+const morgan = require('morgan');
 
-const logFilePath = path.join(__dirname, 'logs', 'app.log');
+// Get the current working directory
+const logDirectory = path.join(process.cwd(), 'logs');
 
-const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+// Ensure log directory exists
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
-const logRequest = (req, res, next) => {
-  const logMessage = `[${new Date().toISOString()}] ${req.method} ${req.url}\n`;
-  logStream.write(logMessage);
-  next();
-};
+// Create a write stream (in append mode)
+const accessLogStream = fs.createWriteStream(path.join(logDirectory, 'app.log'), { flags: 'a' });
+
+// Setup the logger
+const logRequest = morgan('combined', { stream: accessLogStream });
 
 const logError = (err, req, res, next) => {
-  const errorMessage = `[${new Date().toISOString()}] Error: ${err.message}\n`;
-  logStream.write(errorMessage);
-  next(err);
+    fs.appendFile(path.join(logDirectory, 'error.log'), `${new Date().toISOString()} - ${err.message}\n`, (err) => {
+        if (err) throw err;
+    });
+    next(err);
 };
 
-module.exports = {
-  logRequest,
-  logError
-};
+module.exports = { logRequest, logError };
