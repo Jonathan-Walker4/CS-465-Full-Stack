@@ -4,8 +4,43 @@
     <meta charset="UTF-8">
     <title>Travel - Travlr Getaways Website Template</title>
     <link rel="stylesheet" href="/css/style.css" type="text/css">
-    <link rel="stylesheet" href="/css/images.css" type="text/css">
-    <link rel="stylesheet" href="/css/travel.css" type="text/css"> <!-- Link to the new travel CSS file -->
+    <link rel="stylesheet" href="/css/images.css" type="text/css"> <!-- Link to the new images CSS file -->
+    <style>
+        /* Additional styles for a better visual presentation */
+        #sites {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            list-style: none;
+            padding: 0;
+        }
+        #sites li {
+            flex-basis: 30%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        #sites li:hover {
+            transform: translateY(-5px);
+        }
+        .travel-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        #sites h2 {
+            margin: 15px;
+            font-size: 1.5em;
+            color: #333;
+        }
+        #sites p {
+            margin: 15px;
+            font-size: 1em;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <div id="background">
@@ -18,16 +53,14 @@
                             <h1>Travel</h1>
                             <ul id="sites">
                                 {{#each trips}}
-                                <li class="trip-item">
-                                    <a href="#"><img src="/images/{{this.image}}" alt="Img" class="travel-image"></a>
-                                    <div class="trip-info">
-                                        <h2>{{this.name}}</h2>
-                                        <p>{{this.description}}</p>
-                                        <p><strong>Length:</strong> {{this.length}} days</p>
-                                        <p><strong>Starting from:</strong> {{this.start}}</p>
-                                        <p><strong>Price per person:</strong> ${{this.perPerson}}</p>
-                                        <p><strong>Resort:</strong> {{this.resort}}</p>
-                                    </div>
+                                <li>
+                                    <a href="/api/trips/{{this.code}}"><img src="/images/{{this.image}}" alt="Img" class="travel-image"></a>
+                                    <h2>{{this.name}}</h2>
+                                    <p>{{this.description}}</p>
+                                    <p>Length: {{this.length}} days</p>
+                                    <p>Starting from: {{formatDate this.start}}</p>
+                                    <p>Price per person: ${{this.perPerson}}</p>
+                                    <p>Resort: {{this.resort}}</p>
                                 </li>
                                 {{/each}}
                             </ul>

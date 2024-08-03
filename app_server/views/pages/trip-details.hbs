@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{name}} - Travlr Getaways</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/images.css" type="text/css"> <!-- Link to the new images CSS file -->
+    <style>
+        /* Additional styles for a detailed view */
+        .trip-details {
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .trip-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .trip-content {
+            padding: 20px;
+        }
+        .trip-content h1 {
+            margin: 0 0 10px;
+            font-size: 2em;
+            color: #333;
+        }
+        .trip-content p {
+            font-size: 1em;
+            color: #666;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div id="page">
+            {{> header }}
+            <div id="contents">
+                <div class="box trip-details">
+                    <img src="/images/{{image}}" alt="{{name}}" class="trip-image">
+                    <div class="trip-content">
+                        <h1>{{name}}</h1>
+                        <p>{{description}}</p>
+                        <p><strong>Length:</strong> {{length}} days</p>
+                        <p><strong>Starting from:</strong> {{formatDate start}}</p>
+                        <p><strong>Price per person:</strong> ${{perPerson}}</p>
+                        <p><strong>Resort:</strong> {{resort}}</p>
+                    </div>
+                </div>
+            </div>
+            {{> footer }}
+        </div>
+    </div>
+</body>
+</html>

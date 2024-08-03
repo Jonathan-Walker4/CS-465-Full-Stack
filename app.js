@@ -8,7 +8,7 @@ const hbs = require('hbs');
 const mongoose = require('mongoose');
 
 // Import Mongoose schema
-require('./app_server/models/trips');
+require('./app_api/models/trips'); // Ensure you have moved the model file
 
 const indexRouter = require('./app_server/routes/index');
 const travelRouter = require('./app_server/routes/travel');
@@ -17,6 +17,10 @@ const newsRouter = require('./app_server/routes/news');
 const roomsRouter = require('./app_server/routes/rooms');
 const contactRouter = require('./app_server/routes/contact');
 const aboutRouter = require('./app_server/routes/about');
+
+// Import API routes
+const apiRouter = require('./app_api/routes/index');
+
 const { logRequest, logError } = require('./logger');
 
 // Connect to MongoDB
@@ -53,6 +57,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Use custom logging middleware
 app.use(logRequest);
 
+// Register a helper function to format dates
+hbs.registerHelper('formatDate', function(date) {
+    if (!date) return 'N/A';
+    
+    // Use JavaScript Date methods for formatting
+    return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+});
+
 // Use routes
 app.use('/', indexRouter);
 app.use('/travel', travelRouter);
@@ -61,6 +77,9 @@ app.use('/news', newsRouter);
 app.use('/rooms', roomsRouter);
 app.use('/contact', contactRouter);
 app.use('/about', aboutRouter);
+
+// API routes
+app.use('/api', apiRouter); // Wire-up API routes
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
