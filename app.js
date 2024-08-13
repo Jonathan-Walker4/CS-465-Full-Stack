@@ -1,4 +1,3 @@
-// app.js
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -10,6 +9,7 @@ const mongoose = require('mongoose');
 // Import Mongoose schema
 require('./app_server/models/trips');
 
+// Import routers
 const indexRouter = require('./app_server/routes/index');
 const travelRouter = require('./app_server/routes/travel');
 const mealsRouter = require('./app_server/routes/meals');
@@ -17,7 +17,13 @@ const newsRouter = require('./app_server/routes/news');
 const roomsRouter = require('./app_server/routes/rooms');
 const contactRouter = require('./app_server/routes/contact');
 const aboutRouter = require('./app_server/routes/about');
+const apiRouter = require('./app_api/routes/index');
+
+// Import custom logging middleware
 const { logRequest, logError } = require('./logger');
+
+// Import and connect to MongoDB
+require('./app_api/models/db');
 
 // Connect to MongoDB
 const dbURI = 'mongodb://127.0.0.1/travlr';
@@ -34,6 +40,14 @@ mongoose.connection.on('disconnected', () => {
 
 const app = express();
 
+// Enable CORS
+app.use('/api', (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    next();
+});
+
 // View engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views', 'pages'));
 app.set('view engine', 'hbs');
@@ -44,7 +58,7 @@ hbs.registerPartials(path.join(__dirname, 'app_server', 'views', 'partials'));
 // Middleware setup
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Serve static files from the root directory
@@ -61,6 +75,7 @@ app.use('/news', newsRouter);
 app.use('/rooms', roomsRouter);
 app.use('/contact', contactRouter);
 app.use('/about', aboutRouter);
+app.use('/api', apiRouter);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
