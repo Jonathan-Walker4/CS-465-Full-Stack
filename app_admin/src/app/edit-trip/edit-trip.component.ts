@@ -26,14 +26,12 @@ export class EditTripComponent implements OnInit {
 
   ngOnInit(): void {
     // Retrieve stashed trip ID
-    let tripCode = localStorage.getItem("tripCode");
+    const tripCode = localStorage.getItem("tripCode");
     if (!tripCode) {
-      alert("Something wrong, couldn't find where I stashed tripCode!");
+      alert("Something went wrong, couldn't find where the tripCode was stored!");
       this.router.navigate(['']);
       return;
     }
-    console.log('EditTripComponent::ngOnInit');
-    console.log('tripcode:' + tripCode);
   
     this.editForm = this.formBuilder.group({
       _id: [],
@@ -47,55 +45,50 @@ export class EditTripComponent implements OnInit {
       description: ['', Validators.required]
     });
   
+    // Fetch the specific trip data by its code
     this.tripDataService.getTrip(tripCode)
-      .subscribe({
-        next: (value: any) => {
-          this.trip = value;
-          console.log('Received trip data:', value);  // Log the full response here
-  
-          if (!value) {
-            this.message = 'No Trip Retrieved!';
-          } else {
-            // Extract the date portion from the datetime string
-            const formattedDate = value.start ? value.start.split('T')[0] : '';
-  
-            // Populate our record into the form using patchValue
-            this.editForm.patchValue({
-              code: value.code,
-              name: value.name,
-              length: value.length,
-              start: formattedDate, // Use the formatted date here
-              resort: value.resort,
-              perPerson: value.perPerson,
-              image: value.image,
-              description: value.description
-            });
-  
-            this.message = 'Trip: ' + tripCode + ' retrieved';
-          }
-  
-          console.log(this.message);
-        },
-        error: (error: any) => {
-          console.log('Error: ' + error);
+    .subscribe({
+      next: (tripData: Trip) => {
+        if (tripData) {
+          // Convert the start date to YYYY-MM-DD format
+          const formattedDate = new Date(tripData.start).toISOString().split('T')[0];
+          
+          // Patch the form values including the formatted start date
+          this.editForm.patchValue({
+            code: tripData.code,
+            name: tripData.name,
+            length: tripData.length,
+            start: formattedDate, // Set the date in YYYY-MM-DD format
+            resort: tripData.resort,
+            perPerson: tripData.perPerson,
+            image: tripData.image,
+            description: tripData.description
+          });
+          this.message = `Trip: ${tripCode} retrieved`;
+        } else {
+          this.message = 'No Trip Retrieved!';
         }
-      });
+      },
+      error: () => {
+        this.message = 'An error occurred while retrieving the trip data.';
+      }
+    });
   }
   
-
   public onSubmit(): void {
     this.submitted = true;
     if (this.editForm.valid) {
       this.tripDataService.updateTrip(this.editForm.value)
         .subscribe({
-          next: (value: any) => {
-            console.log(value);
+          next: () => {
             this.router.navigate(['']);
           },
-          error: (error: any) => {
-            console.log('Error: ' + error);
+          error: () => {
+            this.message = 'An error occurred while updating the trip.';
           }
         });
+    } else {
+      this.message = 'Please correct the errors in the form before submitting.';
     }
   }
 

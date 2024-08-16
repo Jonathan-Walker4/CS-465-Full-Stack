@@ -5,9 +5,18 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const hbs = require('hbs');
 const mongoose = require('mongoose');
+const passport = require('passport'); // Import passport for authentication
 
 // Import Mongoose schema
 require('./app_server/models/trips');
+
+// Import DotEnv Config
+require('dotenv').config();
+
+// Import Passport Configuration
+require('./app_api/config/passport'); 
+
+require('./app_api/models/user'); // Register the User model
 
 // Import routers
 const indexRouter = require('./app_server/routes/index');
@@ -60,9 +69,19 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(passport.initialize()); // Initialize Passport for authentication
 
 // Serve static files from the root directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Catch unauthorized error and create 401
+app.use((err, req, res, next) => {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ "message": err.name + ": " + err.message });
+    } else {
+        next(err); // Pass on to the error handler if it's not an UnauthorizedError
+    }
+});
 
 // Use custom logging middleware
 app.use(logRequest);

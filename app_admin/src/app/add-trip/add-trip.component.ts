@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { TripDataService } from '../services/trip-data.service';
+import { HttpHeaders } from '@angular/common/http';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-add-trip',
@@ -18,11 +20,11 @@ export class AddTripComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private tripService: TripDataService
+    private tripService: TripDataService,
+    private authenticationService: AuthenticationService  // Inject AuthenticationService
   ) { }
 
   ngOnInit(): void {
-    console.log('Add Trip Component Loading');
     this.addForm = this.formBuilder.group({
       _id: [],
       code: ['', Validators.required],
@@ -35,7 +37,6 @@ export class AddTripComponent implements OnInit {
       description: ['', Validators.required],
     });
   }
-  
 
   public onSubmit() {
     this.submitted = true;

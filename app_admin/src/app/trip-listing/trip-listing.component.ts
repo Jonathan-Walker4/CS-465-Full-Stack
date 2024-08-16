@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { TripCardComponent } from '../trip-card/trip-card.component';
 import { Trip } from '../models/trip';
 import { TripDataService } from '../services/trip-data.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-trip-listing',
@@ -19,23 +20,23 @@ export class TripListingComponent implements OnInit {
 
   constructor(
     private tripDataService: TripDataService,
-    private router: Router
-    ) {
-    console.log('trip-listing constructor');
+    private router: Router,
+    public authService: AuthenticationService  // Inject AuthenticationService here
+  ) {
+    
   }
 
   public editTrip(tripCode: string): void {
     localStorage.setItem('tripCode', tripCode);
     this.router.navigate(['/edit-trip']);
   }
-  
 
   public addTrip(): void {
-    console.log('Add Trip button clicked');
+    
     this.router.navigate(['/add-trip']);
   }
 
-  private getStuff(): void {
+  private getTrips(): void {
     this.tripDataService.getTrips()
       .subscribe({
         next: (value: Trip[]) => {
@@ -48,14 +49,14 @@ export class TripListingComponent implements OnInit {
           console.log(this.message);
         },
         error: (error: any) => {
-          console.error('Error fetching trips:', error); // More detailed error logging
+          console.error('Error fetching trips:', error);
+          console.error('Error status:', error.status);
+          console.error('Error message:', error.message);
         }
       });
   }
-  
 
   ngOnInit(): void {
-    console.log('ngOnInit');
-    this.getStuff();
+    this.getTrips();  // Fetch the trips when the component initializes
   }
 }
