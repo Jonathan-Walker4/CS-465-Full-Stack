@@ -1,7 +1,7 @@
 # CS 465 Module Eight Journal
 
 ## GitHub Repository
-[GitHub Repository Link]((https://github.com/Jonathan-Walker4/CS-465-Full-Stack))
+[GitHub Repository Link](https://github.com/Jonathan-Walker4/CS-465-Full-Stack)
 
 ## Architecture
 In the development of the full stack web application, I employed multiple types of frontend development, including Express HTML, JavaScript, and Angular for the Single-Page Application (SPA). Express HTML and JavaScript were primarily used for server-side rendering, which is more traditional and suitable for simpler, static content. The SPA, developed using Angular, provided a dynamic and interactive user experience, enhancing the user interface by updating content without requiring a full-page reload. This approach allowed for a more seamless user experience, particularly on the administrative side of the application.
